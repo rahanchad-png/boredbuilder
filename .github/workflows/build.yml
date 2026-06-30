@@ -27,7 +27,8 @@ jobs:
           export TERM=xterm
           cd BoredOS
           chmod +x tools/install_deps_linux.sh
-          ./tools/install_deps_linux.sh
+          yes | ./tools/install_deps_linux.sh
+
 
       - name: Build BoredOS ISO
         run: |
