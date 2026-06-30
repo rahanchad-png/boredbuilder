@@ -1,17 +1,18 @@
 name: Build BoredOS ISO
 
 on:
+  push:
+    branches: [ "main" ]
   workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-22.04
     steps:
-      - name: Checkout repository with submodules
-        uses: actions/checkout@v4
-        with:
-          submodules: recursive
-          fetch-depth: 0
+      - name: Clone BoredOS repository
+        run: |
+          git clone --recurse-submodules https://github.com/BoredOS/BoredOS.git
+          cd BoredOS
 
       - name: Cache toolchain
         id: cache-toolchain
@@ -31,16 +32,18 @@ jobs:
             build-essential bison flex libgmp-dev \
             libmpc-dev libmpfr-dev texinfo \
             wget curl
+          cd BoredOS
           chmod +x tools/install_deps_linux.sh
           ./tools/install_deps_linux.sh
 
       - name: Build BoredOS ISO
         run: |
+          cd BoredOS
           make -j$(nproc) boredos.iso
 
       - name: Upload ISO as artifact
         uses: actions/upload-artifact@v4
         with:
           name: boredos-iso
-          path: boredos.iso
+          path: BoredOS/boredos.iso
           retention-days: 30
