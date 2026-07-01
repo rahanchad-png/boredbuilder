@@ -26,6 +26,7 @@ jobs:
         run: |
           export TERM=xterm
           cd BoredOS
+          sed -i 's|\./usr/download_prerequisites|./contrib/download_prerequisites|g' tools/install_deps_linux.sh
           chmod +x tools/install_deps_linux.sh
           yes | ./tools/install_deps_linux.sh
 
